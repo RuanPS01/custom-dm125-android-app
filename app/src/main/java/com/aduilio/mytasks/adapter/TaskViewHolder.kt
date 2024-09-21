@@ -10,7 +10,7 @@ class TaskViewHolder(private val binding: TaskListItemBinding) : RecyclerView.Vi
         binding.tvTitle.text = task.title
 
         binding.tvDate.text = task.date?.let {
-            task.date
+            task.date.toString()
         } ?: run {
             "-"
         }
