@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyTasks</string>
+    <string name="title">Título</string>
+    <string name="description">Descrição</string>
+    <string name="date">Data</string>
+    <string name="time">Hora</string>
+    <string name="save">Salvar</string>
 </resources>
