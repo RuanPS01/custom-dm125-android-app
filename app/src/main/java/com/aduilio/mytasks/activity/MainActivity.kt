@@ -3,17 +3,23 @@ package com.aduilio.mytasks.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aduilio.mytasks.adapter.TasksAdapter
 import com.aduilio.mytasks.databinding.ActivityMainBinding
 import com.aduilio.mytasks.entity.Task
-import com.aduilio.mytasks.service.RetrofitService
-import java.time.LocalDate
+import com.aduilio.mytasks.listener.TaskListItemListener
+import com.aduilio.mytasks.service.TaskService
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var tasksAdapter: TasksAdapter
+
+    private val taskService: TaskService by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,8 +27,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Log.e("lifecycle", "Main onCreate")
-
-        val retrfoit = RetrofitService()
 
         initComponents()
     }
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         Log.e("lifecycle", "Main onResume")
+
+        readTasks()
     }
 
     override fun onStop() {
@@ -58,20 +64,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
-        val tasksAdapter = TasksAdapter(this)
+        tasksAdapter = TasksAdapter(this, object : TaskListItemListener {
+            override fun onClick(task: Task) {
+                val intent = Intent(this@MainActivity, TaskFormActivity::class.java)
+                intent.putExtra("task", task)
+                startActivity(intent)
+            }
+        })
         binding.rvTasks.adapter = tasksAdapter
         binding.rvTasks.layoutManager = LinearLayoutManager(this)
 
-        val tasks = ArrayList<Task>()
-        tasks.add(Task(title = "Tarefa sem data"))
-        for (i in 1..20) {
-            tasks.add(Task(title = "Tarefa $i", date = LocalDate.now()))
-        }
-
-        tasksAdapter.setItems(tasks)
-
         binding.fabNewTask.setOnClickListener {
             startActivity(Intent(this, TaskFormActivity::class.java))
+        }
+    }
+
+    private fun readTasks() {
+        taskService.readAll().observe(this) { responseDto ->
+            if (responseDto.isError) {
+                Toast.makeText(this, "Erro com o servidor", Toast.LENGTH_SHORT).show()
+            } else {
+                responseDto.value?.let { tasks ->
+                    tasksAdapter.setItems(tasks)
+                }
+            }
         }
     }
 }

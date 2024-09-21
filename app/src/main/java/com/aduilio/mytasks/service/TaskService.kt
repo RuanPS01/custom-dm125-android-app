@@ -1,34 +1,32 @@
 package com.aduilio.mytasks.service
 
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.aduilio.mytasks.entity.Task
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.aduilio.mytasks.repository.ResponseDto
 
-class TaskService {
+class TaskService : ViewModel() {
 
     private val taskRepository = RetrofitService().getTaskRepository()
 
-    fun create(task: Task) {
-        taskRepository.create(task).enqueue(object : Callback<Task> {
-            override fun onResponse(call: Call<Task>, response: Response<Task>) {
-                if (response.isSuccessful) {
+    fun save(task: Task): LiveData<ResponseDto<Task>> {
+        val taskLiveData = MutableLiveData<ResponseDto<Task>>()
 
-                } else {
-                    Log.e("server", "Erro do servidor")
-                    response.errorBody()?.let { errorBody ->
-                        Log.e("server", errorBody.toString())
-                    }
-                }
-            }
+        task.id?.let { taskId ->
+            taskRepository.update(taskId, task).enqueue(MyCallback(taskLiveData))
+        } ?: run {
+            taskRepository.create(task).enqueue(MyCallback(taskLiveData))
+        }
 
-            override fun onFailure(call: Call<Task>, t: Throwable) {
-                Log.e("server", "Erro do servidor")
-                t.message?.let { exception ->
-                    Log.e("server", "Server exception: $exception")
-                }
-            }
-        })
+        return taskLiveData
+    }
+
+    fun readAll(): LiveData<ResponseDto<List<Task>>> {
+        val tasksLiveData = MutableLiveData<ResponseDto<List<Task>>>()
+
+        taskRepository.readAll().enqueue(MyCallback(tasksLiveData))
+
+        return tasksLiveData
     }
 }

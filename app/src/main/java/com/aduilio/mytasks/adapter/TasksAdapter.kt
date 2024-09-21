@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aduilio.mytasks.databinding.TaskListItemBinding
 import com.aduilio.mytasks.entity.Task
+import com.aduilio.mytasks.listener.TaskListItemListener
 
-class TasksAdapter(private val context: Context) : RecyclerView.Adapter<TaskViewHolder>() {
+class TasksAdapter(
+    private val context: Context,
+    private val listener: TaskListItemListener
+) : RecyclerView.Adapter<TaskViewHolder>() {
 
     private val tasks = ArrayList<Task>()
 
@@ -17,7 +21,7 @@ class TasksAdapter(private val context: Context) : RecyclerView.Adapter<TaskView
         Log.e("adapter", "Criando um TaskViewHolder")
 
         val binding = TaskListItemBinding.inflate(LayoutInflater.from(context), parent, false)
-        return TaskViewHolder(binding)
+        return TaskViewHolder(binding, listener)
     }
 
     override fun getItemCount() = tasks.size

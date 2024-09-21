@@ -3,6 +3,8 @@ package com.aduilio.mytasks.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.aduilio.mytasks.databinding.ActivityTaskFormBinding
 import com.aduilio.mytasks.entity.Task
@@ -12,7 +14,9 @@ class TaskFormActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTaskFormBinding
 
-    private val taskService = TaskService()
+    private val taskService: TaskService by viewModels()
+
+    private var taskId: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +28,26 @@ class TaskFormActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         initComponents()
+        setValues()
     }
 
     private fun initComponents() {
         binding.btSave.setOnClickListener {
-            val task = Task(title = binding.etTitle.text.toString())
-            taskService.create(task)
+            val task = Task(title = binding.etTitle.text.toString(), id = taskId)
+            taskService.save(task).observe(this) { responseDto ->
+                if (responseDto.isError) {
+                    Toast.makeText(this, "Erro com o servidor", Toast.LENGTH_SHORT).show()
+                } else {
+                    finish()
+                }
+            }
+        }
+    }
+
+    private fun setValues() {
+        (intent.extras?.getSerializable("task") as Task?)?.let { task ->
+            taskId = task.id
+            binding.etTitle.setText(task.title)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.aduilio.mytasks.entity
 
+import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -10,4 +11,4 @@ data class Task(
     var date: LocalDate? = null,
     var time: LocalTime? = null,
     var completed: Boolean = false
-)
+) : Serializable
