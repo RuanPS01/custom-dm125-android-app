@@ -53,4 +53,5 @@ dependencies {
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.preference.ktx)
     implementation(libs.swipe.refresh.layout)
+    implementation(libs.firebase.auth.ktx)
 }

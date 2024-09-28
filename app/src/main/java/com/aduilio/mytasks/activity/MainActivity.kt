@@ -23,6 +23,8 @@ import com.aduilio.mytasks.entity.Task
 import com.aduilio.mytasks.fragment.PreferenceFragment
 import com.aduilio.mytasks.listener.TaskListItemListener
 import com.aduilio.mytasks.service.TaskService
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +44,11 @@ class MainActivity : AppCompatActivity() {
         initComponents()
 
         askNotificationPermission()
+
+        if (Firebase.auth.currentUser == null) {
+            finish()
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
     }
 
     override fun onStart() {
@@ -89,6 +96,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_settings) {
             startActivity(Intent(this, PreferenceFragment::class.java))
+        }
+
+        if (item.itemId == R.id.action_logout) {
+            Firebase.auth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
         return super.onOptionsItemSelected(item)

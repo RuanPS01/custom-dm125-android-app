@@ -13,4 +13,9 @@
     <string name="daily_notification_on">Receber notificações diárias</string>
     <string name="daily_notification">Notificação diária</string>
     <string name="settings">Configurações</string>
+    <string name="email">E-mail</string>
+    <string name="password">Senha</string>
+    <string name="login">Login</string>
+    <string name="create_account">Criar conta</string>
+    <string name="logout">Sair</string>
 </resources>
