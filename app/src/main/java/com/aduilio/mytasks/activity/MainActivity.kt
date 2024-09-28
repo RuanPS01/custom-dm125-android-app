@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_settings) {
-            startActivity(Intent(this, PreferenceActivity::class.java))
+            startActivity(Intent(this, PreferenceFragment::class.java))
         }
 
         return super.onOptionsItemSelected(item)
@@ -105,6 +105,10 @@ class MainActivity : AppCompatActivity() {
         binding.rvTasks.adapter = tasksAdapter
         binding.rvTasks.layoutManager = LinearLayoutManager(this)
 
+        binding.srlTasks.setOnRefreshListener {
+            readTasks()
+        }
+
         binding.fabNewTask.setOnClickListener {
             startActivity(Intent(this, TaskFormActivity::class.java))
         }
@@ -112,6 +116,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun readTasks() {
         taskService.readAll().observe(this) { responseDto ->
+            binding.srlTasks.isRefreshing = false
+
             if (responseDto.isError) {
                 Toast.makeText(this, "Erro com o servidor", Toast.LENGTH_SHORT).show()
             } else {

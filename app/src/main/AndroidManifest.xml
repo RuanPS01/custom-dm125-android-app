@@ -28,6 +28,7 @@
         <activity
             android:name=".activity.PreferenceActivity"
             android:label="@string/settings" />
+        <activity android:name=".fragment.PreferenceFragment" />
 
         <service
             android:name=".service.MyFirebaseMessagingService"

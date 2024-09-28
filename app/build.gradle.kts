@@ -52,4 +52,5 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.preference.ktx)
+    implementation(libs.swipe.refresh.layout)
 }
