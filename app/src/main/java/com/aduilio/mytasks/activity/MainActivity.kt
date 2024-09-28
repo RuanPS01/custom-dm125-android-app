@@ -1,12 +1,19 @@
 package com.aduilio.mytasks.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aduilio.mytasks.R
 import com.aduilio.mytasks.adapter.TasksAdapter
 import com.aduilio.mytasks.databinding.ActivityMainBinding
 import com.aduilio.mytasks.entity.Task
@@ -29,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         Log.e("lifecycle", "Main onCreate")
 
         initComponents()
+
+        askNotificationPermission()
     }
 
     override fun onStart() {
@@ -90,4 +99,33 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                    AlertDialog.Builder(this)
+                            .setMessage(R.string.notification_permission_rationale)
+                            .setPositiveButton(
+                                R.string.accept
+                            ) { _, _ ->
+                                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                            .setNegativeButton(R.string.not_accept, null)
+                            .show()
+                } else {
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            Log.e("permission", "Permission dada: $isGranted")
+        }
 }
