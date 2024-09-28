@@ -5,14 +5,18 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.aduilio.mytasks.R
 import com.aduilio.mytasks.databinding.TaskListItemBinding
 import com.aduilio.mytasks.entity.Task
-import com.aduilio.mytasks.listener.TaskListItemListener
+import com.aduilio.mytasks.listener.TaskItemClickListener
 
 class TasksAdapter(
     private val context: Context,
-    private val listener: TaskListItemListener
+    private val messageView: TextView,
+    private val listener: TaskItemClickListener
 ) : RecyclerView.Adapter<TaskViewHolder>() {
 
     private val tasks = ArrayList<Task>()
@@ -21,7 +25,7 @@ class TasksAdapter(
         Log.e("adapter", "Criando um TaskViewHolder")
 
         val binding = TaskListItemBinding.inflate(LayoutInflater.from(context), parent, false)
-        return TaskViewHolder(binding, listener)
+        return TaskViewHolder(context, binding, listener)
     }
 
     override fun getItemCount() = tasks.size
@@ -39,5 +43,34 @@ class TasksAdapter(
         tasks.addAll(items)
 
         notifyDataSetChanged()
+        checkEmptyTasks()
+    }
+
+    fun getItem(position: Int): Task {
+        return tasks[position]
+    }
+
+    fun refreshItem(position: Int) {
+        notifyItemChanged(position)
+    }
+
+    fun deleteItem(position: Int) {
+        tasks.removeAt(position)
+        notifyItemRemoved(position)
+
+        checkEmptyTasks()
+    }
+
+    fun updateItem(position: Int, item: Task) {
+        tasks[position] = item
+        notifyItemChanged(position)
+    }
+
+    private fun checkEmptyTasks() {
+        if (tasks.isEmpty()) {
+            messageView.text = ContextCompat.getString(context, R.string.empty_tasks)
+        } else {
+            messageView.text = null
+        }
     }
 }
