@@ -29,4 +29,28 @@ class TaskService : ViewModel() {
 
         return tasksLiveData
     }
+
+    fun delete(task: Task): LiveData<ResponseDto<Void>> {
+        val liveData = MutableLiveData<ResponseDto<Void>>()
+
+        task.id?.let { taskId ->
+            taskRepository.delete(taskId).enqueue(MyCallback(liveData))
+        } ?: run {
+            liveData.value = ResponseDto(isError = true)
+        }
+
+        return liveData
+    }
+
+    fun markAsCompleted(task: Task): LiveData<ResponseDto<Task>> {
+        val taskLiveData = MutableLiveData<ResponseDto<Task>>()
+
+        task.id?.let { taskId ->
+            taskRepository.markAsCompleted(taskId).enqueue(MyCallback(taskLiveData))
+        } ?: run {
+            taskLiveData.value = ResponseDto(isError = true)
+        }
+
+        return taskLiveData
+    }
 }

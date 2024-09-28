@@ -15,13 +15,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aduilio.mytasks.R
+import com.aduilio.mytasks.adapter.TaskItemTouchCallback
 import com.aduilio.mytasks.adapter.TasksAdapter
 import com.aduilio.mytasks.databinding.ActivityMainBinding
 import com.aduilio.mytasks.entity.Task
 import com.aduilio.mytasks.fragment.PreferenceFragment
-import com.aduilio.mytasks.listener.TaskListItemListener
+import com.aduilio.mytasks.listener.TaskItemClickListener
+import com.aduilio.mytasks.listener.TaskItemSwipeListener
 import com.aduilio.mytasks.service.TaskService
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -49,6 +52,17 @@ class MainActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(this, LoginActivity::class.java))
         }
+
+        savedInstanceState?.let { state ->
+            state.keySet().forEach { key -> Log.e("state", key) }
+        }
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString("minhaChave", "meuValor")
     }
 
     override fun onStart() {
@@ -94,20 +108,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_settings) {
-            startActivity(Intent(this, PreferenceFragment::class.java))
-        }
-
-        if (item.itemId == R.id.action_logout) {
-            Firebase.auth.signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
+        when (item.itemId) {
+            R.id.action_settings -> startActivity(Intent(this, PreferenceFragment::class.java))
+            R.id.action_logout -> {
+                Firebase.auth.signOut()
+                startActivity(Intent(this, LoginActivity::class.java))
+            }
         }
 
         return super.onOptionsItemSelected(item)
     }
 
     private fun initComponents() {
-        tasksAdapter = TasksAdapter(this, object : TaskListItemListener {
+        tasksAdapter = TasksAdapter(this, binding.tvMessage, object : TaskItemClickListener {
             override fun onClick(task: Task) {
                 binding.etTitle?.let {
                     binding.etTitle?.setText(task.title)
@@ -117,9 +130,34 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
+
+            override fun onMarkAsCompleteClick(position: Int, task: Task) {
+                taskService.markAsCompleted(task).observe(this@MainActivity) { responseDto ->
+                    if (responseDto.isError) {
+                        Toast.makeText(this@MainActivity, "Falha na operação", Toast.LENGTH_SHORT).show()
+                    } else {
+                        responseDto.value?.let { value ->
+                            tasksAdapter.updateItem(position, value)
+                        }
+                    }
+                }
+            }
         })
         binding.rvTasks.adapter = tasksAdapter
         binding.rvTasks.layoutManager = LinearLayoutManager(this)
+
+        ItemTouchHelper(TaskItemTouchCallback(object : TaskItemSwipeListener {
+            override fun onSwipe(position: Int) {
+                val task = tasksAdapter.getItem(position)
+                taskService.delete(task).observe(this@MainActivity) { responseDto ->
+                    if (responseDto.isError) {
+                        tasksAdapter.refreshItem(position)
+                    } else {
+                        tasksAdapter.deleteItem(position)
+                    }
+                }
+            }
+        })).attachToRecyclerView(binding.rvTasks)
 
         binding.srlTasks.setOnRefreshListener {
             readTasks()
@@ -136,6 +174,7 @@ class MainActivity : AppCompatActivity() {
 
             if (responseDto.isError) {
                 Toast.makeText(this, "Erro com o servidor", Toast.LENGTH_SHORT).show()
+                binding.tvMessage.text = ContextCompat.getString(this, R.string.get_tasks_error)
             } else {
                 responseDto.value?.let { tasks ->
                     tasksAdapter.setItems(tasks)
@@ -147,8 +186,7 @@ class MainActivity : AppCompatActivity() {
     private fun askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
+                    this, Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_DENIED
             ) {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
@@ -158,8 +196,7 @@ class MainActivity : AppCompatActivity() {
                                 R.string.accept
                             ) { _, _ ->
                                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            }
-                            .setNegativeButton(R.string.not_accept, null)
+                            }.setNegativeButton(R.string.not_accept, null)
                             .show()
                 } else {
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)

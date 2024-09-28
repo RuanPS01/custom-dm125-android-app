@@ -3,6 +3,7 @@ package com.aduilio.mytasks.activity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -44,10 +45,15 @@ class TaskFormActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("deprecation")
     private fun setValues() {
         (intent.extras?.getSerializable("task") as Task?)?.let { task ->
             taskId = task.id
             binding.etTitle.setText(task.title)
+
+            if (task.completed) {
+                binding.btSave.visibility = View.INVISIBLE
+            }
         }
     }
 
