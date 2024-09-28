@@ -51,4 +51,5 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging.ktx)
+    implementation(libs.preference.ktx)
 }

@@ -6,17 +6,21 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aduilio.mytasks.R
 import com.aduilio.mytasks.adapter.TasksAdapter
 import com.aduilio.mytasks.databinding.ActivityMainBinding
 import com.aduilio.mytasks.entity.Task
+import com.aduilio.mytasks.fragment.PreferenceFragment
 import com.aduilio.mytasks.listener.TaskListItemListener
 import com.aduilio.mytasks.service.TaskService
 
@@ -51,6 +55,10 @@ class MainActivity : AppCompatActivity() {
 
         Log.e("lifecycle", "Main onResume")
 
+        val pref = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(PreferenceFragment.DAILY_NOTIFICATION_KEY, false)
+        Log.e("pref", "O valor da configuração é: $pref")
+
         readTasks()
     }
 
@@ -70,6 +78,20 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
 
         Log.e("lifecycle", "Main onDestroy")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_settings) {
+            startActivity(Intent(this, PreferenceActivity::class.java))
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initComponents() {

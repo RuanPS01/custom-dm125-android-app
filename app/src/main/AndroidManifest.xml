@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.TaskFormActivity" />
+        <activity
+            android:name=".activity.PreferenceActivity"
+            android:label="@string/settings" />
 
         <service
             android:name=".service.MyFirebaseMessagingService"
