@@ -97,9 +97,13 @@ class MainActivity : AppCompatActivity() {
     private fun initComponents() {
         tasksAdapter = TasksAdapter(this, object : TaskListItemListener {
             override fun onClick(task: Task) {
-                val intent = Intent(this@MainActivity, TaskFormActivity::class.java)
-                intent.putExtra("task", task)
-                startActivity(intent)
+                binding.etTitle?.let {
+                    binding.etTitle?.setText(task.title)
+                } ?: run {
+                    val intent = Intent(this@MainActivity, TaskFormActivity::class.java)
+                    intent.putExtra("task", task)
+                    startActivity(intent)
+                }
             }
         })
         binding.rvTasks.adapter = tasksAdapter
