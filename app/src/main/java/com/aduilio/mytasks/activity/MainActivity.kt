@@ -23,6 +23,7 @@ import com.aduilio.mytasks.adapter.TasksAdapter
 import com.aduilio.mytasks.databinding.ActivityMainBinding
 import com.aduilio.mytasks.entity.Task
 import com.aduilio.mytasks.fragment.PreferenceFragment
+import com.aduilio.mytasks.helper.NotificationHelper
 import com.aduilio.mytasks.listener.TaskItemClickListener
 import com.aduilio.mytasks.listener.TaskItemSwipeListener
 import com.aduilio.mytasks.service.TaskService
@@ -57,6 +58,8 @@ class MainActivity : AppCompatActivity() {
             state.keySet().forEach { key -> Log.e("state", key) }
         }
 
+        val helper = NotificationHelper(this)
+//        helper.showNotification("Titulo da notificação 1", "Texto da notificação")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
