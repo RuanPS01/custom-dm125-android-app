@@ -38,6 +38,10 @@ class TaskViewHolder(
                 listener.onMarkAsCompleteClick(adapterPosition, task)
                 true
             }
+            menu.add(ContextCompat.getString(context, R.string.share)).setOnMenuItemClickListener {
+                listener.onShareClick(task)
+                true
+            }
         }
     }
 }

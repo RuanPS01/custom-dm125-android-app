@@ -1,5 +1,6 @@
 package com.aduilio.mytasks.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -27,6 +28,11 @@ class TaskFormActivity : AppCompatActivity() {
         Log.e("lifecycle", "TaskForm onCreate")
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        intent.extras?.getString(Intent.EXTRA_TEXT)?.let { text ->
+            binding.etTitle.setText(text)
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
 
         initComponents()
         setValues()

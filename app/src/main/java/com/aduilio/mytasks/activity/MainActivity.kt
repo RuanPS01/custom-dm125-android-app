@@ -142,6 +142,19 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+            override fun onShareClick(task: Task) {
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.putExtra(Intent.EXTRA_TEXT, task.title)
+                intent.setType("text/plain")
+
+                startActivity(
+                    Intent.createChooser(
+                        intent,
+                        ContextCompat.getString(this@MainActivity, R.string.share_using)
+                    )
+                )
+            }
         })
         binding.rvTasks.adapter = tasksAdapter
         binding.rvTasks.layoutManager = LinearLayoutManager(this)
@@ -165,6 +178,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.fabNewTask.setOnClickListener {
             startActivity(Intent(this, TaskFormActivity::class.java))
+
+//            Log.e("thread", "Thread 1: ${Thread.currentThread().name}")
+//
+//            CoroutineScope(Dispatchers.Main).launch {
+//                Log.e("thread", "Thread 2: ${Thread.currentThread().name}")
+//                Thread.sleep(10000)
+//
+//                withContext(Dispatchers.Main) {
+//                    Log.e("thread", "Thread 3: ${Thread.currentThread().name}")
+//                    binding.tvMessage.setText("Finalizou")
+//                }
+//            }
         }
     }
 
