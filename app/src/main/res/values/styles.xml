@@ -2,8 +2,12 @@
 <resources>
 
     <style name="MyButton" parent="Widget.Material3.Button">
-        <item name="backgroundTint">@color/orange_700</item>
+        <item name="backgroundTint">@color/primary</item>
         <item name="android:height">60dp</item>
+        <item name="cornerRadius">100dp</item>
+    </style>
+    <style name="CornerRadiusStyle" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">100dp</item>
     </style>
 
 </resources>

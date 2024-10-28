@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyTasks</string>
+    <string name="app_name">Task Hub</string>
     <string name="title">Título</string>
     <string name="description">Descrição</string>
     <string name="date">Data</string>
@@ -17,6 +17,7 @@
     <string name="password">Senha</string>
     <string name="login">Login</string>
     <string name="create_account">Criar conta</string>
+    <string name="google_login">Entrar com Google</string>
     <string name="logout">Sair</string>
     <string name="mark_as_completed">Marcar como concluída</string>
     <string name="empty_tasks">Não existe nenhuma tarefa cadastrada.\n\nQue tal que criar uma nova tarefa?</string>

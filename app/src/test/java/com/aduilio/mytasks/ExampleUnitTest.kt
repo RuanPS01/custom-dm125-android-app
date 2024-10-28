@@ -1,4 +1,4 @@
-package com.aduilio.mytasks
+package com.ruan.mytasks
 
 import org.junit.Test
 

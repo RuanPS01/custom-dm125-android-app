@@ -61,6 +61,9 @@
             android:id="@+id/etDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none"
+            android:cursorVisible="false"
             android:hint="@string/date" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -76,12 +79,16 @@
         app:layout_constraintStart_toEndOf="@id/tilDate"
         app:layout_constraintTop_toBottomOf="@id/tilDescription"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="136dp">
+        tools:layout_editor_absoluteY="136dp"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none"
+            android:cursorVisible="false"
             android:hint="@string/time" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -91,6 +98,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        style="@style/CornerRadiusStyle"
         android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

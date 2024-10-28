@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.aduilio.mytasks"
+    namespace = "com.ruan.mytasks"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.aduilio.mytasks"
+        applicationId = "com.ruan.mytasks"
         minSdk = 26
         targetSdk = 34
         versionCode = 1000
@@ -37,21 +37,32 @@ android {
 }
 
 dependencies {
+    // AndroidX e Material Design
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.ui.graphics.android)
+    implementation(libs.preference.ktx)
+    implementation(libs.swipe.refresh.layout)
+
+    // ViewModel
+    implementation(libs.lifecycle.viewmodel.ktx)
+
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
-    implementation(libs.lifecycle.viewmodel.ktx)
+
+    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging.ktx)
-    implementation(libs.preference.ktx)
-    implementation(libs.swipe.refresh.layout)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.ui.auth)
+
+    // Testes
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }
