@@ -22,30 +22,37 @@ class TaskViewHolder(
 
         if (task.completed) {
             binding.viewIndicator.setBackgroundResource(R.color.gray_300)
-            binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.gray_300))
+            binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
+            binding.tvTitle.setBackgroundResource(R.color.gray_300)
+            binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
         } else {
             val today = LocalDate.now()
             val taskDate = task.date
 
-            binding.viewIndicator.setBackgroundResource(R.color.primary)
-            binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
             when {
                 taskDate == null || taskDate.isAfter(today) -> {
                     // Tarefas sem data ou com data futura
                     binding.tvTitle.setBackgroundResource(R.color.primary)
-
+                    binding.viewIndicator.setBackgroundResource(R.color.primary)
+                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
                 }
                 taskDate.isEqual(today) -> {
                     // Tarefas que vencem hoje
                     binding.tvTitle.setBackgroundResource(R.color.yellow_700)
+                    binding.viewIndicator.setBackgroundResource(R.color.yellow_700)
+                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
                 }
                 taskDate.isBefore(today.minusDays(1)) -> {
                     // Tarefas vencidas (antes de ontem)
                     binding.tvTitle.setBackgroundResource(R.color.red_700)
+                    binding.viewIndicator.setBackgroundResource(R.color.red_700)
+                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
                 }
                 else -> {
                     // Tarefas no prazo (hoje ou futuro)
                     binding.tvTitle.setBackgroundResource(R.color.primary)
+                    binding.viewIndicator.setBackgroundResource(R.color.primary)
+                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
                 }
             }
 
