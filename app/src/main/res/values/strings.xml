@@ -21,7 +21,7 @@
     <string name="logout">Sair</string>
     <string name="mark_as_completed">Marcar como concluída</string>
     <string name="empty_tasks">Não existe nenhuma tarefa cadastrada.\n\nQue tal que criar uma nova tarefa?</string>
-    <string name="get_tasks_error">Não foi possível obter as tarefas.\n\nVerifica sua internet.</string>
+    <string name="get_tasks_error">Não foi possível obter as tarefas.\n\nVerifique sua internet. \n\nDica: recarrege mais vezes para realizar mais requisições e acordar o servidor (~4 min).</string>
     <string name="new_task_information">Cria uma nova tarefa</string>
     <string name="share">Compartilhar</string>
     <string name="share_using">Compartilhar a tarefa com...</string>

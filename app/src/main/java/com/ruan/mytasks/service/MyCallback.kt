@@ -13,7 +13,7 @@ class MyCallback<T>(private val liveData: MutableLiveData<ResponseDto<T>>) : Cal
         if (response.isSuccessful) {
             liveData.value = ResponseDto(value = response.body())
         } else {
-            Log.e("server", "Erro do servidor")
+            Log.e("server", "Erro do servidor.")
             response.errorBody()?.let { errorBody ->
                 Log.e("server", errorBody.toString())
             }

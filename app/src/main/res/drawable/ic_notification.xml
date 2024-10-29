@@ -8,10 +8,10 @@
     <group
         android:scaleX="0.92"
         android:scaleY="0.92"
-        android:translateX="0.96"
-        android:translateY="0.96">
+        android:translateX="3.96"
+        android:translateY="7.46">
         <path
             android:fillColor="@android:color/white"
-            android:pathData="M3,13h2v-2L3,11v2zM3,17h2v-2L3,15v2zM3,9h2L5,7L3,7v2zM7,13h14v-2L7,11v2zM7,17h14v-2L7,15v2zM7,7v2h14L21,7L7,7z" />
+            android:pathData="M6.41,0H7.65V2.14H6.41V0M5.09,0V8.35H2.57V2.14H0V0Zm9,0H16.6V8.35H14.09V5.18H12.64V3.05h1.45V0M11.32,0V8.35H8.8V0Z" />
     </group>
 </vector>

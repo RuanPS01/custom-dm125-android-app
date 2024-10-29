@@ -20,31 +20,32 @@ class TaskViewHolder(
     fun setValues(task: Task) {
         binding.tvTitle.text = task.title
 
-        // Verifica se a tarefa está concluída
         if (task.completed) {
             binding.viewIndicator.setBackgroundResource(R.color.gray_300)
             binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.gray_300))
         } else {
-            // Obtém a data atual e a data da tarefa (usando uma variável local)
             val today = LocalDate.now()
             val taskDate = task.date
 
+            binding.viewIndicator.setBackgroundResource(R.color.primary)
+            binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.white))
             when {
                 taskDate == null || taskDate.isAfter(today) -> {
                     // Tarefas sem data ou com data futura
-                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.primary))
+                    binding.tvTitle.setBackgroundResource(R.color.primary)
+
                 }
                 taskDate.isEqual(today) -> {
                     // Tarefas que vencem hoje
-                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.yellow_700))
+                    binding.tvTitle.setBackgroundResource(R.color.yellow_700)
                 }
                 taskDate.isBefore(today.minusDays(1)) -> {
                     // Tarefas vencidas (antes de ontem)
-                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.red_700))
+                    binding.tvTitle.setBackgroundResource(R.color.red_700)
                 }
                 else -> {
                     // Tarefas no prazo (hoje ou futuro)
-                    binding.tvTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.primary))
+                    binding.tvTitle.setBackgroundResource(R.color.primary)
                 }
             }
 
